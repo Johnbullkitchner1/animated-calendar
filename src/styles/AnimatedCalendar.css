@@ -1,52 +1,99 @@
-/* src/styles/AnimatedCalendar.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.calendar-wrapper {
+  background-color: #f0f4f8; /* Light gray-blue background */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.calendar-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2); /* Subtle overlay for depth */
+  z-index: 1;
+}
+
 .calendar-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
-  font-family: sans-serif;
+  @apply max-w-lg mx-auto p-6 rounded-xl shadow-2xl bg-white bg-opacity-90 text-gray-900;
+  position: relative;
+  z-index: 2;
   animation: fadeIn 1s ease-in-out;
 }
 
+.calendar-container.dark-mode {
+  @apply bg-gray-900 text-white;
+}
+
+.calendar-title {
+  @apply text-2xl font-bold;
+}
+
+.theme-toggle {
+  @apply p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition;
+}
+
 .calendar-navigation {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  @apply flex justify-center gap-4 mb-6;
+}
+
+.calendar-navigation button {
+  @apply px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transform hover:scale-105 transition;
 }
 
 .calendar-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  @apply flex flex-col gap-2;
 }
 
 .calendar-week {
-  display: flex;
-  justify-content: space-around;
+  @apply grid grid-cols-7 gap-2;
+}
+
+.calendar-week.header {
+  @apply text-center font-semibold;
 }
 
 .calendar-day {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+  @apply w-10 h-10 flex items-center justify-center rounded-lg transition transform hover:scale-110 hover:shadow-md cursor-pointer;
   background-color: #f0f0f0;
-  border-radius: 8px;
-  transition: background-color 0.3s;
 }
 
 .calendar-day:hover {
-  background-color: #cce5ff;
+  @apply bg-blue-200;
 }
 
 .calendar-day.empty {
-  background-color: transparent;
+  @apply bg-transparent cursor-default;
+}
+
+.calendar-day.selected {
+  @apply bg-blue-500 text-white;
+}
+
+.clock {
+  @apply mt-6 p-4 rounded-lg bg-gray-200 text-lg font-mono animate-pulse;
+}
+
+.dark-mode .clock {
+  @apply bg-gray-800;
+}
+
+.selected-day-info {
+  @apply mt-4 p-4 rounded-lg bg-blue-100 text-blue-900;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
