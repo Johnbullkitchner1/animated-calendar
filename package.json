@@ -1,24 +1,33 @@
 {
-  "name": "frontend",
+  "name": "animated-calendar",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
+  "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "1.4.0",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-scripts": "5.0.1",
+    "wait-on": "^8.0.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "eslintConfig": {
     "extends": [
@@ -40,7 +49,26 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
+    "electron": "^35.2.1",
+    "electron-builder": "^26.0.12",
     "postcss": "^8.5.3",
     "tailwindcss": "3.4.17"
+  },
+  "build": {
+    "appId": "com.example.animatedcalendar",
+    "productName": "Animated Calendar",
+    "files": [
+      "build/**/*",
+      "public/electron.js"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }

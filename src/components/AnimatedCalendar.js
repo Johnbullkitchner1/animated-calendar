@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/AnimatedCalendar.css';
+import backgroundImage from '../images/background.jpg'; // Import image
 
 const AnimatedCalendar = () => {
   const [calendar, setCalendar] = useState(null);
@@ -72,7 +73,7 @@ const AnimatedCalendar = () => {
   const minuteDeg = (minutes / 60) * 360 + (seconds / 60) * 6;
   const hourDeg = (hours / 12) * 360 + (minutes / 60) * 30;
 
-  // Get events for a specific day
+  // Get event for a specific day
   const getEventForDay = (day) => {
     if (!calendar?.events || day === 0) return null;
     const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
@@ -83,7 +84,15 @@ const AnimatedCalendar = () => {
   if (error) return <div className="calendar-container">{error}</div>;
 
   return (
-    <div className="calendar-wrapper">
+    <div
+      className="calendar-wrapper"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <div className={`calendar-container ${isDarkMode ? 'dark-mode' : ''}`}>
         <div className="flex justify-between items-center mb-4">
           <h1 className="calendar-title">{calendar.month} {calendar.year}</h1>
