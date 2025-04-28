@@ -64,6 +64,21 @@ const AnimatedCalendar = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  // Calculate rotations for clock hands
+  const seconds = time.getSeconds();
+  const minutes = time.getMinutes();
+  const hours = time.getHours() % 12;
+  const secondDeg = (seconds / 60) * 360;
+  const minuteDeg = (minutes / 60) * 360 + (seconds / 60) * 6;
+  const hourDeg = (hours / 12) * 360 + (minutes / 60) * 30;
+
+  // Get events for a specific day
+  const getEventForDay = (day) => {
+    if (!calendar?.events || day === 0) return null;
+    const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    return calendar.events[dateStr] || null;
+  };
+
   if (loading) return <div className="calendar-container">Loading...</div>;
   if (error) return <div className="calendar-container">{error}</div>;
 
@@ -92,28 +107,41 @@ const AnimatedCalendar = () => {
           </div>
           {calendar.calendar.map((week, index) => (
             <div className="calendar-week" key={index}>
-              {week.map((day, i) => (
-                <div
-                  key={i}
-                  className={`calendar-day ${day === 0 ? 'empty' : ''} ${
-                    selectedDay === day && day !== 0 ? 'selected' : ''
-                  }`}
-                  onClick={() => handleDayClick(day)}
-                >
-                  {day !== 0 ? day : ''}
-                </div>
-              ))}
+              {week.map((day, i) => {
+                const event = getEventForDay(day);
+                return (
+                  <div
+                    key={i}
+                    className={`calendar-day ${day === 0 ? 'empty' : ''} ${
+                      selectedDay === day && day !== 0 ? 'selected' : ''
+                    } ${event ? 'has-event' : ''}`}
+                    onClick={() => handleDayClick(day)}
+                    title={event ? event : ''}
+                  >
+                    {day !== 0 ? day : ''}
+                    {event && <span className="event-marker"></span>}
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
 
         <div className="clock">
-          {time.toLocaleTimeString()}
+          <div className="clock-face">
+            <div className="hand hour-hand" style={{ transform: `rotate(${hourDeg}deg)` }}></div>
+            <div className="hand minute-hand" style={{ transform: `rotate(${minuteDeg}deg)` }}></div>
+            <div className="hand second-hand" style={{ transform: `rotate(${secondDeg}deg)` }}></div>
+            <div className="clock-center"></div>
+          </div>
         </div>
 
         {selectedDay && (
           <div className="selected-day-info">
             Selected: {selectedDay} {calendar.month} {calendar.year}
+            {getEventForDay(selectedDay) && (
+              <div>Event: {getEventForDay(selectedDay)}</div>
+            )}
           </div>
         )}
       </div>

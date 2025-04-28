@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .calendar-wrapper {
-  background-color: #f0f4f8; /* Light gray-blue background */
+  background-color: #f0f4f8;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -18,7 +18,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.2); /* Subtle overlay for depth */
+  background: rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .calendar-container.dark-mode {
-  @apply bg-gray-900 text-white;
+  @apply bg-gray-900 text-gray-100;
 }
 
 .calendar-title {
@@ -38,7 +38,8 @@
 }
 
 .theme-toggle {
-  @apply p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition;
+  @apply p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition transform hover:scale-110;
+  animation: bounce 0.3s ease-in-out;
 }
 
 .calendar-navigation {
@@ -51,6 +52,7 @@
 
 .calendar-grid {
   @apply flex flex-col gap-2;
+  animation: slideIn 0.5s ease-in-out;
 }
 
 .calendar-week {
@@ -61,13 +63,25 @@
   @apply text-center font-semibold;
 }
 
+.calendar-container.dark-mode .calendar-week.header {
+  @apply text-gray-200;
+}
+
 .calendar-day {
-  @apply w-10 h-10 flex items-center justify-center rounded-lg transition transform hover:scale-110 hover:shadow-md cursor-pointer;
+  @apply w-10 h-10 flex items-center justify-center rounded-lg transition transform hover:scale-110 hover:shadow-md cursor-pointer relative;
   background-color: #f0f0f0;
+}
+
+.calendar-container.dark-mode .calendar-day {
+  @apply bg-gray-800 text-gray-100;
 }
 
 .calendar-day:hover {
   @apply bg-blue-200;
+}
+
+.calendar-container.dark-mode .calendar-day:hover {
+  @apply bg-blue-600;
 }
 
 .calendar-day.empty {
@@ -75,19 +89,84 @@
 }
 
 .calendar-day.selected {
-  @apply bg-blue-500 text-white;
+  @apply bg-blue-500 text-white scale-110;
+  animation: pulse 0.5s ease-in-out;
+}
+
+.event-marker {
+  @apply absolute w-2 h-2 rounded-full bg-red-500 bottom-1;
+}
+
+.dark-mode .event-marker {
+  @apply bg-red-400;
 }
 
 .clock {
-  @apply mt-6 p-4 rounded-lg bg-gray-200 text-lg font-mono animate-pulse;
+  @apply mt-6 p-4 rounded-lg bg-gray-200;
 }
 
 .dark-mode .clock {
   @apply bg-gray-800;
 }
 
+.clock-face {
+  @apply relative w-32 h-32 rounded-full mx-auto;
+  background: #fff;
+  border: 4px solid #333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .clock-face {
+  background: #333;
+  border-color: #fff;
+}
+
+.hand {
+  @apply absolute bottom-1/2 left-1/2 transform -translate-x-1/2;
+  transform-origin: bottom;
+}
+
+.hour-hand {
+  @apply w-1 h-10;
+  background: #333;
+}
+
+.dark-mode .hour-hand {
+  background: #fff;
+}
+
+.minute-hand {
+  @apply w-1 h-14;
+  background: #666;
+}
+
+.dark-mode .minute-hand {
+  background: #ccc;
+}
+
+.second-hand {
+  @apply w-0.5 h-16;
+  background: #e74c3c;
+}
+
+.clock-center {
+  @apply absolute w-3 h-3 rounded-full bg-gray-800;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dark-mode .clock-center {
+  @apply bg-gray-200;
+}
+
 .selected-day-info {
   @apply mt-4 p-4 rounded-lg bg-blue-100 text-blue-900;
+  animation: slideUp 0.3s ease-in-out;
+}
+
+.dark-mode .selected-day-info {
+  @apply bg-blue-800 text-blue-100;
 }
 
 @keyframes fadeIn {
@@ -98,5 +177,57 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
